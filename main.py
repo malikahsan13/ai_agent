@@ -7,6 +7,11 @@ load_dotenv()
 
 # llm = ChatOpenAI(model="gpt-40-mini")
 
+class ResearchResponse(BaseModel):
+    topic: str
+    summary: str
+    sources: list[str]
+    tools_used: list[str]
 
 llm2 = ChatAnthropic(model="claude-3-5-sonnet-20241022")
 
