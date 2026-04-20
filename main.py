@@ -2,6 +2,8 @@ from dotenv import load_dotenv
 from pydantic import BaseModel
 from langchain_openai import ChatOpenAI
 from langchain_anthropic import ChatAnthropic
+from langchain.agents import create_tool_calling_agent, AgentExecutor
+
 
 load_dotenv()
 
@@ -34,4 +36,14 @@ prompt = ChatPromptTemplate.from_messages(
         ("placeholder","{agent_scratchpad}"),
     ]
 ).partial(format_instructions=parser.get_format_instructions())
-print(response)
+#print(response)
+
+agent = create_tool_calling_agent(
+    llm=llm,
+    prompt=prompt,
+    tools=[]
+)
+
+agent_executor = AgentExecutor(agent=agent, tools=[], verbose=True)
+raw_response = agent_executor.invoke({"query":"What is the capital of France?"})
+print(raw_response)
